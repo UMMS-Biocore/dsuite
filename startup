@@ -1,0 +1,64 @@
+#!/bin/bash
+
+source /etc/apache2/envvars
+# If /export/ is mounted, export_user_files file moving all data to /export/
+# symlinks will point from the original location to the new path under /export/
+# If /export/ is not given, nothing will happen in that step
+python /usr/local/bin/export_user_files.py 
+
+mkdir -p /export/.dolphinnext/.ssh
+chown -R ${APACHE_RUN_USER}:${APACHE_RUN_GROUP} /export/.dolphinnext
+
+   echo -e "$(hostname -i)    $(hostname).localdomain   $(hostname)" >> /etc/hosts
+if [ ! -f /var/www/html/dolphinnext/config/.sec ]; then
+   mv /usr/local/bin/.sec /var/www/html/dolphinnext/config/.sec
+fi
+
+/usr/local/bin/user_add.sh
+
+find /var/lib/mysql -type f -exec touch {} \; && service mysql start 
+#Start ssh
+service ssh start
+#Sendmail service start
+/etc/init.d/sendmail restart 
+
+# start Apache in Foreground, that is needed for Docker
+apache2 -D FOREGROUND & 
+
+#start cron service
+crontab /usr/local/bin/dolphinnext-cron
+service cron start 
+
+# start mongodb 
+mkdir -p /export/mongodb
+mongod --fork --logpath /var/log/mongodb.log --dbpath /export/mongodb --bind_ip 127.0.0.1 --port 27017 --bind_ip_all
+
+# start dmeta dportal dsso
+if [ ! -f /var/www/html/dmeta/config.env ]; then
+   cp /var/www/html/dmeta/docs/templates/template.config.env /var/www/html/dmeta/config.env
+fi
+if [ ! -f /var/www/html/dportal/config.env ]; then
+   cp /var/www/html/dportal/docs/template.config.env /var/www/html/dportal/config.env
+fi
+if [ ! -f /var/www/html/dsso/config.env ]; then
+   cp /var/www/html/dsso/docs/template.config.env /var/www/html/dsso/config.env
+fi
+
+# certificates
+
+cd /var/www/html/dmeta
+git pull
+npm i
+npm audit fix
+#pm2 restart pm2-process.json 
+#screen -d -m npm run start:dev 
+cd /var/www/html/dportal
+git pull
+npm i
+npm audit fix
+#pm2 restart pm2-process.json 
+cd /var/www/html/dsso
+git pull
+npm i
+npm audit fix
+#pm2 restart pm2-process.json
