@@ -48,10 +48,10 @@ ls /export
 ```
 5. Now, you can open your browser to access dolphinnext, dsso, dmeta, dportal using the urls below.
 
-http://localhost:8080/dolphinnext
-https://localhost:3000
-https://localhost:4000
-https://localhost:5000
+* http://localhost:8080/dolphinnext
+* https://localhost:3000
+* https://localhost:4000
+* https://localhost:5000
 
 Running on the Amazon or Google Cloud
 ------
