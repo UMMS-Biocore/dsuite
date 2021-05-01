@@ -31,7 +31,7 @@ service cron start
 
 # start mongodb 
 mkdir -p /export/mongodb
-mongod --fork --logpath /var/log/mongodb.log --dbpath /export/mongodb --bind_ip 127.0.0.1 --port 27017 --bind_ip_all
+mongod --fork --logpath /var/log/mongodb.log --dbpath /export/mongodb 
 
 # start dmeta dportal dsso
 if [ ! -f /var/www/html/dmeta/config.env ]; then
@@ -46,19 +46,19 @@ fi
 
 # certificates
 
-cd /var/www/html/dmeta
-git pull
-npm i
-npm audit fix
+#cd /var/www/html/dmeta
+#git pull
+#npm i
+#npm audit fix
 #pm2 restart pm2-process.json 
 #screen -d -m npm run start:dev 
-cd /var/www/html/dportal
-git pull
-npm i
-npm audit fix
+#cd /var/www/html/dportal
+#git pull
+#npm i
+#npm audit fix
 #pm2 restart pm2-process.json 
-cd /var/www/html/dsso
-git pull
-npm i
-npm audit fix
+#cd /var/www/html/dsso
+#git pull
+#npm i
+#npm audit fix
 #pm2 restart pm2-process.json
