@@ -31,7 +31,7 @@ service cron start
 
 # start mongodb 
 mkdir -p /export/mongodb
-mongod --fork --logpath /var/log/mongodb.log --dbpath /export/mongodb 
+mongod --fork --logpath /var/log/mongodb.log --dbpath /export/mongodb --bind_ip_all
 
 # start dmeta dportal dsso
 if [ ! -f /var/www/html/dmeta/config.env ]; then
