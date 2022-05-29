@@ -70,9 +70,9 @@ fi
 
 ## add www-data to docker group
 ## change the group of /var/run/docker.sock to docker
-if [ -e /var/run/docker.sock ]; then
-  usermod -aG docker www-data
-  newgrp docker
-  chgrp docker /var/run/docker.sock
-  chmod g+rwx /var/run/docker.sock
-fi
+#if [ -e /var/run/docker.sock ]; then
+#  usermod -aG docker www-data
+#  newgrp docker
+#  chgrp docker /var/run/docker.sock
+#  chmod g+rwx /var/run/docker.sock
+#fi
