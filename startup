@@ -16,6 +16,7 @@ fi
 
 /usr/local/bin/user_add.sh
 
+
 find /var/lib/mysql -type f -exec touch {} \; && service mysql start 
 #Start ssh
 service ssh start
@@ -28,6 +29,10 @@ apache2 -D FOREGROUND &
 #start cron service
 crontab /usr/local/bin/dolphinnext-cron
 service cron start 
+
+#Update Timezone
+TZ=$(grep "TIMEZONE=" /export/dolphinnext/config/.sec | awk -F "=" '{print $2}')
+ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # start mongodb 
 mkdir -p /export/mongodb
@@ -62,3 +67,12 @@ fi
 #npm i
 #npm audit fix
 #pm2 restart pm2-process.json
+
+## add www-data to docker group
+## change the group of /var/run/docker.sock to docker
+#if [ -e /var/run/docker.sock ]; then
+#  usermod -aG docker www-data
+#  newgrp docker
+#  chgrp docker /var/run/docker.sock
+#  chmod g+rwx /var/run/docker.sock
+#fi

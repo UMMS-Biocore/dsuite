@@ -26,15 +26,15 @@ RUN npm install -C /var/www/html/dmeta
 RUN npm install -C /var/www/html/dportal
 RUN npm install -C /var/www/html/dsso
 
-# mongodb  https://github.com/docker-library/mongo/blob/1fe97dd9ab8e8db7224a84345583bb415d83f602/4.4-rc/Dockerfile
+# mongodb https://github.com/docker-library/mongo/blob/master/4.0/Dockerfile
+
 ARG MONGO_PACKAGE=mongodb-org
 ARG MONGO_REPO=repo.mongodb.org
 ENV MONGO_PACKAGE=${MONGO_PACKAGE} MONGO_REPO=${MONGO_REPO}
 
 ENV MONGO_MAJOR 4.0
-ENV MONGO_VERSION 4.0.19
-# bashbrew-architectures:amd64 arm64v8
-RUN echo "deb http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
+ENV MONGO_VERSION 4.0.28
+RUN echo "deb [ signed-by=/etc/apt/keyrings/mongodb.gpg ] http://$MONGO_REPO/apt/ubuntu xenial/${MONGO_PACKAGE%-unstable}/$MONGO_MAJOR multiverse" | tee "/etc/apt/sources.list.d/${MONGO_PACKAGE%-unstable}.list"
 
 RUN set -x \
 # installing "mongodb-enterprise" pulls in "tzdata" which prompts for input
@@ -49,9 +49,16 @@ RUN set -x \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/lib/mongodb
 
+
+# install docker
+RUN apt-get -qy full-upgrade 
+RUN apt-get install -qy curl 
+RUN curl -sSL https://get.docker.com/ | sh
+
 ADD startup /usr/local/bin/startup
 
 EXPOSE 27017
+
 
 RUN echo "DONE!"
 
