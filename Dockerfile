@@ -26,6 +26,11 @@ RUN npm install -C /var/www/html/dmeta
 RUN npm install -C /var/www/html/dportal
 RUN npm install -C /var/www/html/dsso
 
+# install docker
+#RUN apt-get -qy full-upgrade
+#RUN apt-get install -qy curl
+#RUN curl -sSL https://get.docker.com/ | sh
+
 # mongodb https://github.com/docker-library/mongo/blob/master/4.0/Dockerfile
 
 ARG MONGO_PACKAGE=mongodb-org
@@ -50,10 +55,11 @@ RUN set -x \
 	&& rm -rf /var/lib/mongodb
 
 
+
 # install docker
-RUN apt-get -qy full-upgrade 
-RUN apt-get install -qy curl 
-RUN curl -sSL https://get.docker.com/ | sh
+#RUN apt-get -qy full-upgrade 
+#RUN apt-get install -qy curl 
+#RUN curl -sSL https://get.docker.com/ | sh
 
 ADD startup /usr/local/bin/startup
 
