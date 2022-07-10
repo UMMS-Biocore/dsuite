@@ -62,6 +62,7 @@ RUN set -x \
 #RUN curl -sSL https://get.docker.com/ | sh
 
 ADD startup /usr/local/bin/startup
+ADD mongoinit.js /usr/local/bin/mongoinit.js
 
 EXPOSE 27017
 
