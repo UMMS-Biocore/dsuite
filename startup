@@ -98,6 +98,8 @@ service cron start
 #Update Timezone
 TZ=$(grep "TIMEZONE=" /export/dolphinnext/config/.sec | awk -F "=" '{print $2}')
 ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+DIFF=$(date +%:z)
+mysql -u root  --execute="SET GLOBAL time_zone = '${DIFF}';"
 
 # start mongodb 
 mkdir -p /export/mongodb
